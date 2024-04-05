@@ -1,2 +1,2 @@
-- add fa icons
-- add router
+- add the update-note popup
+- apply cryptography due to the transfer of data from the api to the frontend
