@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react'
-import './Home.css'
-import { getUser, getUsers, getNotes } from '../services';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOut, faAdd, faContactCard, faListDots, faEdit, faTrash, faClose } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from "react";
+import "./Home.css";
+import { getUser, getUsers, getNotes } from "../services";
+import PopupForm from "../components/PopupForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+	faSignOut,
+	faAdd,
+	faContactCard,
+	faListDots,
+} from "@fortawesome/free-solid-svg-icons";
+import Notes from "../components/Notes";
 
 function Home() {
-
 	const [users, setUsers] = useState([]);
 	const [notes, setNotes] = useState([]);
 	const [addNotePopup, setAddNotePopup] = useState(false);
+	const [updateNotePopup, setUpdateNotePopup] = useState(false);
 
 	useEffect(() => {
 		getUsers()
-			.then((users) => {
-				setUsers(users);
-			})
+			.then((users) => setUsers(users))
 			.catch((err) => {
 				console.log(err);
 			});
@@ -25,8 +30,12 @@ function Home() {
 			})
 			.catch((err) => {
 				console.log(err);
-			})
+			});
 	}, []);
+
+	const onAddNoteSubmit = () => {};
+
+	const onUpdateNoteSubmit = () => {};
 
 	return (
 		<div className="app">
@@ -47,21 +56,24 @@ function Home() {
 						</li>
 						<li className="account-item account-name">Henok Eshetu</li>
 						<li className="account-item account-logout">
-							<FontAwesomeIcon icon={faSignOut} />{" "}logout
+							<FontAwesomeIcon icon={faSignOut} /> logout
 						</li>
 					</ul>
 				</li>
 				<span className="sidebar-items-separator-text">CATEGORIES</span>
 				<hr className="sidebar-items-separator" />
 				<ul className="sidebar-items">
-					<li className="sidebar-item add-note" onClick={() => setAddNotePopup(true)}>
-						<FontAwesomeIcon icon={faAdd} />{" "}Add Note
+					<li
+						className="sidebar-item add-note"
+						onClick={() => setAddNotePopup(true)}
+					>
+						<FontAwesomeIcon icon={faAdd} /> Add Note
 					</li>
 					<li className="sidebar-item">
-						<FontAwesomeIcon icon={faListDots} />{" "}About
+						<FontAwesomeIcon icon={faListDots} /> About
 					</li>
 					<li className="sidebar-item">
-						<FontAwesomeIcon icon={faContactCard} />{" "}Contact
+						<FontAwesomeIcon icon={faContactCard} /> Contact
 					</li>
 				</ul>
 			</ul>
@@ -76,32 +88,24 @@ function Home() {
 						placeholder="Search ..."
 					/>
 				</div>
-				<ul className="notes">
-					{notes.map((note) => (
-						<li className="note-column">
-							<div className="note">
-								<span className="title">{JSON.parse(note).title}</span>
-								<p className="body">{JSON.parse(note).body}</p>
-								<div className="note-icons">
-									<FontAwesomeIcon icon={faEdit} style={{ "color": "dodgerblue" }} />
-									<FontAwesomeIcon icon={faTrash} style={{ "color": "tomato" }} />
-								</div>
-							</div>
-						</li>
-					))}
-				</ul>
+				<Notes notes={notes} update={setUpdateNotePopup} />
 			</div>
-			{addNotePopup &&
-				<div className="add-note-popup">
-					<FontAwesomeIcon icon={faClose} className="add-note-close" onClick={() => setAddNotePopup(false)} />
-					<form action="/" method="POST">
-							<h2>New Note</h2>
-							<input type="text" name="title" id="add-note-title" className="add-note-title" placeholder="Title ..." />
-							<textarea name="body" id="body" placeholder="Your note here ..."></textarea>
-							<input type="submit" value="Create" />
-					</form>
-				</div>
-			}
+			{addNotePopup && (
+				<PopupForm
+					onCloseClick={() => setAddNotePopup(false)}
+					onFormSubmit={onAddNoteSubmit}
+					data={{}}
+					type="Create"
+				/>
+			)}
+			{updateNotePopup && (
+				<PopupForm
+					onCloseClick={() => setUpdateNotePopup(false)}
+					onFormSubmit={onUpdateNoteSubmit}
+					data={{}}
+					type="Update"
+				/>
+			)}
 		</div>
 	);
 }
