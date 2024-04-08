@@ -1,0 +1,77 @@
+.delete-container {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	padding: 2% 0 0 0;
+	background-color: #111111ac;
+	display: flex;
+	align-items: start;
+	justify-content: center;
+	transition-duration: .8s;
+}
+
+.delete-main {
+	width: 30%;
+	height: 30%;
+	background-color: #f1f1f1;
+	border: none;
+	border-radius: 30px;
+	padding: 25px 30px;
+	display: flex;
+	flex-direction: column;
+}
+
+.delete-main-header {
+	width: 100%;
+	height: 8%;
+	border-bottom: 1px solid #c7c7c7;
+}
+
+.delete-main-header > span {
+	font-size: 20px;
+	font-weight: bold;
+	color: #c77f7d;
+}
+
+.delete-main-content {
+	width: 100%;
+	height: 82%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	word-wrap: break-word;
+}
+
+.delete-main-content > span {
+	font-size: 26px;
+	color: #6c6c6c;
+	font-weight: bold;
+}
+
+.delete-main-footer {
+	width: 100%;
+	height: 20%;
+	border-top: 1px solid #c7c7c7;
+	display: flex;
+	align-items: end;
+	justify-content: end;
+}
+
+.delete-main-footer > button {
+	width: 15%;
+	height: 80%;
+	font-size: 16px;
+	padding: 5px;
+	margin-left: 15px;
+	border: none;
+	border-radius: 30px;
+	background-color: #d8d8d8;
+	transition: ease-out .3s;
+}
+
+.delete-main-footer > button:hover {
+	background-color: #b2b2b2;
+	font-weight: bold;
+	cursor: pointer;
+}

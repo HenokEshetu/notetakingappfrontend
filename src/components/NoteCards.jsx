@@ -3,7 +3,7 @@ import "./NoteCards.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-function NoteCards({ note, onClickUpdate, onClickDelete }) {
+function NoteCards({ note, onClickEdit, onClickDelete }) {
 	return (
 		<li className="note-column">
 			<div className="note-container">
@@ -12,12 +12,12 @@ function NoteCards({ note, onClickUpdate, onClickDelete }) {
 				<div className="note-icons">
 					<FontAwesomeIcon
 						icon={faEdit}
-						style={{ color: "dodgerblue" }}
-						onClick={onClickUpdate}
+						style={{ color: "#0059b3" }}
+						onClick={onClickEdit}
 					/>
 					<FontAwesomeIcon
 						icon={faTrash}
-						style={{ color: "tomato" }}
+						style={{ color: "#d15036" }}
 						onClick={onClickDelete}
 					/>
 				</div>

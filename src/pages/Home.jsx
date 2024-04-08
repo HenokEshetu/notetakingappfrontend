@@ -1,8 +1,17 @@
 import { useEffect, useState } from "react";
 import "./Home.css";
-import { getUser, getUsers, getNotes } from "../services";
+import { getUser, getUsers } from "../services/UserServices";
+import {
+	getNotes,
+	getNote,
+	createNote,
+	updateNote,
+	deleteNote,
+} from "../services/NoteServices";
 import PopupForm from "../components/PopupForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { v4 as uuid } from "uuid";
+import { AES } from "crypto-js";
 import {
 	faSignOut,
 	faAdd,
@@ -10,12 +19,16 @@ import {
 	faListDots,
 } from "@fortawesome/free-solid-svg-icons";
 import Notes from "../components/Notes";
+import DeleteVerification from "../components/DeleteVerification";
 
 function Home() {
 	const [users, setUsers] = useState([]);
+	const [noteToUpdate, setNoteToUpdate] = useState({});
 	const [notes, setNotes] = useState([]);
 	const [addNotePopup, setAddNotePopup] = useState(false);
 	const [updateNotePopup, setUpdateNotePopup] = useState(false);
+	const [deleteVerificationPopup, setDeleteVerificationPopup] = useState(false);
+	const [deleteId, setDeleteId] = useState("");
 
 	useEffect(() => {
 		getUsers()
@@ -23,6 +36,8 @@ function Home() {
 			.catch((err) => {
 				console.log(err);
 			});
+	}, []);
+	useEffect(() => {
 		getNotes()
 			.then((notes) => {
 				setNotes(notes);
@@ -31,11 +46,58 @@ function Home() {
 			.catch((err) => {
 				console.log(err);
 			});
-	}, []);
+	}, [notes]);
 
-	const onAddNoteSubmit = () => {};
+	const onAddNoteSubmit = (e) => {
+		e.preventDefault();
 
-	const onUpdateNoteSubmit = () => {};
+		const title = e.target["form-title"].value;
+		const body = e.target["form-body"].value;
+
+		createNote({ id: "" + uuid(), title: title, body: body })
+			.then((note) => {
+				console.log(note + " created successfully");
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+
+		setAddNotePopup(false);
+
+		document.getElementById("form-title").value = "";
+		document.getElementById("form-body").value = "";
+	};
+
+	const onUpdateNoteSubmit = (e, id) => {
+		e.preventDefault();
+
+		const title = e.target["form-title"].value;
+		const body = e.target["form-body"].value;
+
+		updateNote({ id: id, title: title, body: body })
+			.then((note) => {
+				console.log(note + " updated successfully");
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+
+		setUpdateNotePopup(false);
+
+		document.getElementById("form-title").value = "";
+		document.getElementById("form-body").value = "";
+	};
+
+	const onClickDelete = (id) => {
+		deleteNote(id)
+			.then((res) => {
+				console.log(res);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		setDeleteVerificationPopup(false);
+	};
 
 	return (
 		<div className="app">
@@ -44,13 +106,12 @@ function Home() {
 					<ul className="account">
 						<li className="account-item account-profile">
 							<img
-								src=""
+								src="/vite.svg"
 								alt=""
 								style={{
 									width: "100px",
 									height: "100px",
 									borderRadius: "50%",
-									border: "1px solid red",
 								}}
 							/>
 						</li>
@@ -88,12 +149,18 @@ function Home() {
 						placeholder="Search ..."
 					/>
 				</div>
-				<Notes notes={notes} update={setUpdateNotePopup} />
+				<Notes
+					notes={notes}
+					update={setUpdateNotePopup}
+					noteToUpdate={setNoteToUpdate}
+					deleteVerificationPopup={setDeleteVerificationPopup}
+					deleteId={setDeleteId}
+				/>
 			</div>
 			{addNotePopup && (
 				<PopupForm
 					onCloseClick={() => setAddNotePopup(false)}
-					onFormSubmit={onAddNoteSubmit}
+					onFormSubmit={(e) => onAddNoteSubmit(e)}
 					data={{}}
 					type="Create"
 				/>
@@ -101,9 +168,15 @@ function Home() {
 			{updateNotePopup && (
 				<PopupForm
 					onCloseClick={() => setUpdateNotePopup(false)}
-					onFormSubmit={onUpdateNoteSubmit}
-					data={{}}
+					onFormSubmit={(e) => onUpdateNoteSubmit(e, noteToUpdate.id)}
+					data={noteToUpdate}
 					type="Update"
+				/>
+			)}
+			{deleteVerificationPopup && (
+				<DeleteVerification
+					deleteVerificationPopup={setDeleteVerificationPopup}
+					onClickDelete={() => onClickDelete(deleteId)}
 				/>
 			)}
 		</div>

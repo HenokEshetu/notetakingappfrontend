@@ -2,14 +2,16 @@
   flex: 25%;
   max-width: 25%;
   display: flex;
-  justify-content: center;
   height: 600px;
 }
 
 .note-container {
+	display: flex;
+	justify-content: space-evenly;
+	flex-direction: column;
   width: 90%;
   height: 90%;
-  padding: 10px 20px;
+  padding: 25px 20px;
   background-color: #e5e5e5;
   border: 1px solid #d1d1d1;
   border-radius: 20px;
@@ -23,15 +25,18 @@
 
 .note-title {
   color: #303030;
-  font-size: 36px;
+  font-size: 28px;
   font-weight: bold;
+	height: 8%;
+	overflow: hidden;
 }
 
 .note-body {
-  color: #656565;
+  color: #606466;
   margin-top: 20px;
-	text-wrap: wrap;
 	overflow: hidden;
+	font-size: 20px;
+	height: 82%;
 }
 
 .note-icons {
@@ -40,19 +45,16 @@
 	align-items: center;
 	justify-content: space-between;
 	width: 20%;
-	position: relative;
-	top: 75%;
-	left: 75%
+	height: 10%;
 }
 
 .note-icons > * {
 	font-size: 22px;
 	color: #646464;
 	cursor: pointer;
-	opacity: .7;
 	transition-duration: .3s;
 }
 
 .note-icons > *:hover {
-	opacity: 1;
+	color: #af4dff !important;
 }
