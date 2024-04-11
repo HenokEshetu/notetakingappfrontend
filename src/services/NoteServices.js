@@ -7,6 +7,11 @@ export const getNotes = async () => {
 	return response.data
 }
 
+export const getNotesByUserId = async (userId) => {
+	const response = await axios.get(BASE_API_URL + "/by-user-id/" + userId)
+	return response.data
+}
+
 export const getNote = async (id) => {
 	const response = await axios.get(BASE_API_URL + "/" + id)
 	return response.data

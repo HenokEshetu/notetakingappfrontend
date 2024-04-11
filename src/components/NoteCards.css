@@ -1,39 +1,38 @@
 .note-column {
-  flex: 25%;
-  max-width: 25%;
-  display: flex;
-  height: 600px;
+	flex: 25%;
+	max-width: 25%;
+	display: flex;
+	height: 600px;
 }
 
 .note-container {
 	display: flex;
 	justify-content: space-evenly;
 	flex-direction: column;
-  width: 90%;
-  height: 90%;
-  padding: 25px 20px;
-  background-color: #e5e5e5;
-  border: 1px solid #d1d1d1;
-  border-radius: 20px;
-  transition-duration: .3s;
+	width: 90%;
+	height: 90%;
+	padding: 25px 20px;
+	background-color: #e5e5e5;
+	border: 1px solid #d1d1d1;
+	border-radius: 20px;
+	transition-duration: .3s;
 }
 
 .note-container:hover {
-  box-shadow: 0 4px 6px rgba(190, 190, 190, 0.30), 0 6px 20px 0 rgba(190, 190, 190, 0.29);
-  border-color: #c6c6c6;
+	border-color: #8d8074;
 }
 
 .note-title {
-  color: #303030;
-  font-size: 28px;
-  font-weight: bold;
+	color: #895756;
+	font-size: 28px;
+	font-weight: bold;
 	height: 8%;
 	overflow: hidden;
 }
 
 .note-body {
-  color: #606466;
-  margin-top: 20px;
+	color: #606466;
+	margin-top: 20px;
 	overflow: hidden;
 	font-size: 20px;
 	height: 82%;
@@ -50,11 +49,29 @@
 
 .note-icons > * {
 	font-size: 22px;
-	color: #646464;
 	cursor: pointer;
 	transition-duration: .3s;
 }
 
 .note-icons > *:hover {
 	color: #af4dff !important;
+}
+
+.note-icon-container {
+	width: 40px;
+	height: 40px;
+	padding: 10px;
+	background-color: #c6c6c6;
+	margin-left: 10px;
+	border: none;
+	border-radius: 50%;
+	transition: ease-out .3s;
+}
+
+.note-icon-container:hover {
+	box-shadow: 0 4px 9px 0 rgba(0, 0, 0, 0.30);
+}
+
+.note-icon-container > * {
+	color: #505050 !important;
 }

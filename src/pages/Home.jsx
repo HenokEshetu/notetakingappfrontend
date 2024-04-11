@@ -3,6 +3,7 @@ import "./Home.css";
 import { getUser, getUsers } from "../services/UserServices";
 import {
 	getNotes,
+	getNotesByUserId,
 	getNote,
 	createNote,
 	updateNote,
@@ -22,7 +23,9 @@ import Notes from "../components/Notes";
 import DeleteVerification from "../components/DeleteVerification";
 
 function Home() {
-	const [users, setUsers] = useState([]);
+	const [user, setUser] = useState({
+		id: "123-456-7890-123-456-789-123-456-789",
+	});
 	const [noteToUpdate, setNoteToUpdate] = useState({});
 	const [notes, setNotes] = useState([]);
 	const [addNotePopup, setAddNotePopup] = useState(false);
@@ -31,14 +34,7 @@ function Home() {
 	const [deleteId, setDeleteId] = useState("");
 
 	useEffect(() => {
-		getUsers()
-			.then((users) => setUsers(users))
-			.catch((err) => {
-				console.log(err);
-			});
-	}, []);
-	useEffect(() => {
-		getNotes()
+		getNotesByUserId(user.id)
 			.then((notes) => {
 				setNotes(notes);
 				console.log(notes);
@@ -54,7 +50,7 @@ function Home() {
 		const title = e.target["form-title"].value;
 		const body = e.target["form-body"].value;
 
-		createNote({ id: "" + uuid(), title: title, body: body })
+		createNote({ id: "" + uuid(), title: title, body: body, userId: user.id })
 			.then((note) => {
 				console.log(note + " created successfully");
 			})
@@ -74,7 +70,7 @@ function Home() {
 		const title = e.target["form-title"].value;
 		const body = e.target["form-body"].value;
 
-		updateNote({ id: id, title: title, body: body })
+		updateNote({ id: id, title: title, body: body, userId: user.id })
 			.then((note) => {
 				console.log(note + " updated successfully");
 			})
@@ -121,7 +117,7 @@ function Home() {
 						</li>
 					</ul>
 				</li>
-				<span className="sidebar-items-separator-text">CATEGORIES</span>
+				<span className="sidebar-items-separator-text">NOTE</span>
 				<hr className="sidebar-items-separator" />
 				<ul className="sidebar-items">
 					<li
@@ -130,6 +126,8 @@ function Home() {
 					>
 						<FontAwesomeIcon icon={faAdd} /> Add Note
 					</li>
+					<span className="sidebar-items-separator-text" style={{ marginTop: "30px" }}>HELP</span>
+					<hr className="sidebar-items-separator" />
 					<li className="sidebar-item">
 						<FontAwesomeIcon icon={faListDots} /> About
 					</li>
