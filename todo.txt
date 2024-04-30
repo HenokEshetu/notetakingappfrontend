@@ -1,2 +1,0 @@
-- apply cryptography due to the transfer of data from the api to the frontend
-- RSA can be applied using one key on the frontend and one key on the backend
