@@ -5,7 +5,7 @@ import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 function NoteCards({ note, onClickEdit, onClickDelete }) {
 	return (
-		<li className="note-column">
+		<li className="note-column" key={note.id}>
 			<div className="note-container">
 				<span className="note-title">{note.title}</span>
 				<p className="note-body">{note.body}</p>

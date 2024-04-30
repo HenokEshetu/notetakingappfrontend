@@ -6,14 +6,18 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #f2f2f2;
+  background-color: #ffb743;
   height: 100vh;
+	background-image: url("/public/fav2.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
 }
 
 .form-container {
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.01), 0 15px 50px 0 rgba(0, 0, 0, 0.1);
   padding: 30px;
   width: 30%;
   height: 70%;
@@ -32,7 +36,7 @@
 }
 
 .register-form-container {
-	height: 60%;
+	height: 65%;
 }
 
 .login-submit-container {
@@ -65,13 +69,14 @@
 }
 
 .error-message {
-  color: red;
+  color: #cc3333 !important;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .active input[type="text"],
 .active input[type="email"],
+.active input[type="file"],
 .active input[type="password"] {
   width: 90%;
   padding: 15px 20px;
@@ -81,12 +86,6 @@
 	font-size: 18px;
 	outline: none;
 	transition: ease-in-out .3s;
-}
-
-.active input[type="text"]:focus,
-.active input[type="email"]:focus,
-.active input[type="password"]:focus {
-	outline: 1px solid #279de7;
 }
 
 .active button {

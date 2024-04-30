@@ -20,7 +20,7 @@ function Notes({
 						noteToUpdate(note);
 					}}
 					onClickDelete={() => {
-						deleteId(note.id);
+						deleteId(note.noteId);
 						deleteVerificationPopup(true);
 					}}
 				/>

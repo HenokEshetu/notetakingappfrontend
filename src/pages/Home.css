@@ -49,7 +49,7 @@
 .sidebar-items-separator {
 	height: 1px;
   width: 100%;
-  color: #777;
+  color: #28353c;
 }
 
 .sidebar-items-separator-text {
@@ -88,9 +88,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: 75%;
-  width: 100%;
+  height: 85%;
+  width: 99.5%;
   list-style-type: none;
+	border-bottom: 2px solid #28353c;
+	border-radius: 20%;
 }
 
 .account-name {
@@ -98,6 +100,12 @@
 	color: #888;
 	font-size: 25px;
 	font-family: Roboto;
+}
+
+.account-email {
+	font-size: 18px;
+	color: #dbbeff;
+	font-weight: bold;
 }
 
 .account-logout {

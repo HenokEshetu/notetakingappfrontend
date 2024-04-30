@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./Home.css";
-import { getUser, getUsers } from "../services/UserServices";
+import { getUserByEmail, getUsers } from "../services/UserServices";
 import {
 	getNotes,
 	getNotesByUserId,
@@ -11,7 +11,7 @@ import {
 } from "../services/NoteServices";
 import PopupForm from "../components/PopupForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { v4 as uuid } from "uuid";
+// import { v4 as uuid } from "uuid";
 import { AES } from "crypto-js";
 import {
 	faSignOut,
@@ -21,11 +21,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Notes from "../components/Notes";
 import DeleteVerification from "../components/DeleteVerification";
+import Cookies from "js-cookie";
+import AboutPopup from "../components/AboutPopup";
+import ContactPopup from "../components/ContactPopup";
 
 function Home() {
-	const [user, setUser] = useState({
-		id: "123-456-7890-123-456-789-123-456-789",
-	});
+	const [user, setUser] = useState({});
 	const [noteToUpdate, setNoteToUpdate] = useState({});
 	const [notes, setNotes] = useState([]);
 	const [addNotePopup, setAddNotePopup] = useState(false);
@@ -33,15 +34,30 @@ function Home() {
 	const [deleteVerificationPopup, setDeleteVerificationPopup] = useState(false);
 	const [deleteId, setDeleteId] = useState("");
 
+	const [about, showAbout] = useState(false);
+	const [contact, showContact] = useState(false);
+
 	useEffect(() => {
-		getNotesByUserId(user.id)
-			.then((notes) => {
-				setNotes(notes);
-				console.log(notes);
+		const email = Cookies.get("email");
+		getUserByEmail(email)
+			.then((_user) => {
+				console.log(_user);
+				setUser(_user);
 			})
-			.catch((err) => {
-				console.log(err);
-			});
+			.catch((err) => console.log(err));
+	}, []);
+
+	useEffect(() => {
+		if (user) {
+			getNotesByUserId(user.id)
+				.then((notes) => {
+					setNotes(notes);
+					console.log(notes);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	}, [notes]);
 
 	const onAddNoteSubmit = (e) => {
@@ -50,7 +66,13 @@ function Home() {
 		const title = e.target["form-title"].value;
 		const body = e.target["form-body"].value;
 
-		createNote({ id: "" + uuid(), title: title, body: body, userId: user.id })
+		const note = {
+			title: title,
+			body: body,
+			userId: user.id,
+		};
+
+		createNote(note)
 			.then((note) => {
 				console.log(note + " created successfully");
 			})
@@ -70,7 +92,14 @@ function Home() {
 		const title = e.target["form-title"].value;
 		const body = e.target["form-body"].value;
 
-		updateNote({ id: id, title: title, body: body, userId: user.id })
+		const note = {
+			noteId: id,
+			title: title,
+			body: body,
+			userId: user.id,
+		};
+
+		updateNote(note)
 			.then((note) => {
 				console.log(note + " updated successfully");
 			})
@@ -84,7 +113,8 @@ function Home() {
 		document.getElementById("form-body").value = "";
 	};
 
-	const onClickDelete = (id) => {
+	const onClickDelete = (e, id) => {
+		e.preventDefault();
 		deleteNote(id)
 			.then((res) => {
 				console.log(res);
@@ -95,6 +125,30 @@ function Home() {
 		setDeleteVerificationPopup(false);
 	};
 
+	const onSearch = (e) => {
+		e.preventDefault();
+		const val = e.target.value;
+		const _notes = [];
+		notes.map((note) => {
+			if (JSON.stringify(note).includes(val)) {
+				_notes.push(note);
+			}
+		});
+		setNotes(_notes);
+		if (val === "") {
+			if (user) {
+				getNotesByUserId(user.id)
+					.then((notes) => {
+						setNotes(notes);
+						console.log(notes);
+					})
+					.catch((err) => {
+						console.log(err);
+					});
+			}
+		}
+	};
+
 	return (
 		<div className="app">
 			<ul className="sidebar">
@@ -102,17 +156,26 @@ function Home() {
 					<ul className="account">
 						<li className="account-item account-profile">
 							<img
-								src="/vite.svg"
+								src="/favicon.jpeg"
 								alt=""
 								style={{
 									width: "100px",
 									height: "100px",
 									borderRadius: "50%",
 								}}
+								// onClick={showProfile}
 							/>
 						</li>
-						<li className="account-item account-name">Henok Eshetu</li>
-						<li className="account-item account-logout">
+						<div className="account-item account-email">{user.email}</div>
+						<li className="account-item account-name">{user.fullName}</li>
+						<li
+							className="account-item account-logout"
+							onClick={() => {
+								Cookies.remove("accessToken");
+								Cookies.remove("email");
+								document.location.href = "http://localhost:5173/";
+							}}
+						>
 							<FontAwesomeIcon icon={faSignOut} /> logout
 						</li>
 					</ul>
@@ -126,18 +189,23 @@ function Home() {
 					>
 						<FontAwesomeIcon icon={faAdd} /> Add Note
 					</li>
-					<span className="sidebar-items-separator-text" style={{ marginTop: "30px" }}>HELP</span>
+					<span
+						className="sidebar-items-separator-text"
+						style={{ marginTop: "30px" }}
+					>
+						HELP
+					</span>
 					<hr className="sidebar-items-separator" />
-					<li className="sidebar-item">
+					<li className="sidebar-item" onClick={() => showAbout(true)}>
 						<FontAwesomeIcon icon={faListDots} /> About
 					</li>
-					<li className="sidebar-item">
+					<li className="sidebar-item" onClick={() => showContact(true)}>
 						<FontAwesomeIcon icon={faContactCard} /> Contact
 					</li>
 				</ul>
 			</ul>
 			<div className="main">
-				<h1>Welcome, Henok!</h1>
+				<h1>Welcome, {user.fullName}!</h1>
 				<div className="search-bar">
 					<input
 						type="search"
@@ -145,20 +213,35 @@ function Home() {
 						id="search"
 						className="search"
 						placeholder="Search ..."
+						onChange={onSearch}
 					/>
 				</div>
-				<Notes
-					notes={notes}
-					update={setUpdateNotePopup}
-					noteToUpdate={setNoteToUpdate}
-					deleteVerificationPopup={setDeleteVerificationPopup}
-					deleteId={setDeleteId}
-				/>
+				{notes.length != 0 ? (
+					<Notes
+						notes={notes}
+						update={setUpdateNotePopup}
+						noteToUpdate={setNoteToUpdate}
+						deleteVerificationPopup={setDeleteVerificationPopup}
+						deleteId={setDeleteId}
+					/>
+				) : (
+					<p
+						style={{
+							width: "100%",
+							height: "100%",
+							textAlign: "center",
+							paddingTop: "20%",
+							fontSize: "100px",
+						}}
+					>
+						The note is Empty!
+					</p>
+				)}
 			</div>
 			{addNotePopup && (
 				<PopupForm
 					onCloseClick={() => setAddNotePopup(false)}
-					onFormSubmit={(e) => onAddNoteSubmit(e)}
+					onFormSubmit={onAddNoteSubmit}
 					data={{}}
 					type="Create"
 				/>
@@ -166,7 +249,7 @@ function Home() {
 			{updateNotePopup && (
 				<PopupForm
 					onCloseClick={() => setUpdateNotePopup(false)}
-					onFormSubmit={(e) => onUpdateNoteSubmit(e, noteToUpdate.id)}
+					onFormSubmit={(e) => onUpdateNoteSubmit(e, noteToUpdate.noteId)}
 					data={noteToUpdate}
 					type="Update"
 				/>
@@ -174,9 +257,11 @@ function Home() {
 			{deleteVerificationPopup && (
 				<DeleteVerification
 					deleteVerificationPopup={setDeleteVerificationPopup}
-					onClickDelete={() => onClickDelete(deleteId)}
+					onClickDelete={(e) => onClickDelete(e, deleteId)}
 				/>
 			)}
+			{about && <AboutPopup onCloseClick={() => showAbout(false)} />}
+			{contact && <ContactPopup onCloseClick={() => showContact(false)} />}
 		</div>
 	);
 }
