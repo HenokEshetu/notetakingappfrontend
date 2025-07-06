@@ -3,6 +3,8 @@
 A modern, elegant, and expressive note-taking web application built with **React** and **Vite**. This project provides a seamless user experience for creating, editing, searching, and managing notes, with robust authentication and a beautiful UI.
 
 ---
+[![Watch the video](https://img.youtube.com/vi/QkF1usPAFcA/hqdefault.jpg)](https://www.youtube.com/watch?v=QkF1usPAFcA)
+---
 
 ## ✨ Features
 
