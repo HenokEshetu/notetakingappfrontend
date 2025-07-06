@@ -31,7 +31,7 @@ A modern, elegant, and expressive note-taking web application built with **React
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/notetakingappfrontend.git
+   git clone https://github.com/HenokEshetu/notetakingappfrontend.git
    cd notetakingappfrontend
    ```
 
